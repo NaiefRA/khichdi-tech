@@ -30,8 +30,8 @@ import Track, {
 function App() {
   const [opened, { toggle }] = useDisclosure();
   // isLogin is false means we are logged in for this logic flow (showing AppShell)
-  const [isLogin, setIsLogin] = useState(false);
-  const [userType, setUserType] = useState("Producer");
+  const [isLogin, setIsLogin] = useState(true);
+  const [userType, setUserType] = useState("");
 
   const [activePage, setActivePage] = useState("dashboard");
 
