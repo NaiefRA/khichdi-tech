@@ -64,6 +64,46 @@ const initialProcessors = [
   },
 ];
 
+// New mock data for Producer's own yields
+const initialMyYields = [
+  {
+    id: 101,
+    farm: "My Farm",
+    crop: "Organic Corn",
+    qty: "3000 kg",
+    price: "$0.9/kg",
+    harvestDate: "Sep 20",
+  },
+  {
+    id: 102,
+    farm: "My Farm",
+    crop: "Soybeans",
+    qty: "1500 kg",
+    price: "$1.1/kg",
+    harvestDate: "Oct 02",
+  },
+];
+
+// New mock data for Processor's own products
+const initialMyProducts = [
+  {
+    id: 201,
+    factory: "My Factory",
+    product: "Corn Syrup",
+    qty: "1000 L",
+    price: "$2.5/L",
+    readyDate: "Oct 10",
+  },
+  {
+    id: 202,
+    factory: "My Factory",
+    product: "Soy Milk",
+    qty: "500 L",
+    price: "$1.8/L",
+    readyDate: "Oct 15",
+  },
+];
+
 // --- ROLE COMPONENTS ---
 
 export function SupplierDashboard() {
@@ -117,7 +157,7 @@ export function SupplierDashboard() {
         onClose={close}
         title="Add New Supply"
         centered
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} // Fixes the black screen issue!
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
       >
         <Stack>
           <TextInput
@@ -148,9 +188,6 @@ export function SupplierDashboard() {
             onChange={(e) => setDelivery(e.currentTarget.value)}
             required
           />
-          <Button fullWidth mt="md" onClick={handleSubmit} color="blue">
-            Submit Supply
-          </Button>
         </Stack>
       </Modal>
 
@@ -159,7 +196,6 @@ export function SupplierDashboard() {
           <Text size="xl" fw={600}>
             My Supply Offerings
           </Text>
-          <Button onClick={open}>+ Add New Supply</Button>
         </Group>
         <Card withBorder shadow="sm" radius="md">
           <Table striped highlightOnHover>
@@ -182,7 +218,8 @@ export function SupplierDashboard() {
 
 export function ProducerDashboard() {
   const [opened, { open, close }] = useDisclosure(false);
-  const [myYields, setMyYields] = useState([]); // Empty array initially
+  // Initialized with new mock data instead of []
+  const [myYields, setMyYields] = useState(initialMyYields);
 
   // Form states
   const [crop, setCrop] = useState("");
@@ -212,11 +249,6 @@ export function ProducerDashboard() {
       <Table.Td>{row.supplier}</Table.Td>
       <Table.Td>{row.item}</Table.Td>
       <Table.Td>{row.price}</Table.Td>
-      <Table.Td>
-        <Button variant="light" size="xs">
-          Procure
-        </Button>
-      </Table.Td>
     </Table.Tr>
   ));
 
@@ -231,6 +263,45 @@ export function ProducerDashboard() {
 
   return (
     <>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Log Crop Harvest"
+        centered
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+      >
+        <Stack>
+          <TextInput
+            label="Crop Name"
+            placeholder="e.g. Raw Wheat"
+            value={crop}
+            onChange={(e) => setCrop(e.currentTarget.value)}
+            required
+          />
+          <TextInput
+            label="Yield Amount"
+            placeholder="e.g. 5000 kg"
+            value={qty}
+            onChange={(e) => setQty(e.currentTarget.value)}
+            required
+          />
+          <TextInput
+            label="Selling Price"
+            placeholder="e.g. $0.8/kg"
+            value={price}
+            onChange={(e) => setPrice(e.currentTarget.value)}
+            required
+          />
+          <TextInput
+            label="Harvest Date"
+            placeholder="e.g. Jan 10"
+            value={harvestDate}
+            onChange={(e) => setHarvestDate(e.currentTarget.value)}
+            required
+          />
+        </Stack>
+      </Modal>
+
       <Grid w={"70vw"}>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <Text size="lg" fw={600} mb="sm">
@@ -243,11 +314,37 @@ export function ProducerDashboard() {
                   <Table.Th>Supplier</Table.Th>
                   <Table.Th>Item</Table.Th>
                   <Table.Th>Price</Table.Th>
-                  <Table.Th>Action</Table.Th>
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>{supplierRows}</Table.Tbody>
             </Table>
+          </Card>
+        </Grid.Col>
+
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Group justify="space-between" mb="sm">
+            <Text size="lg" fw={600}>
+              My Crop Yields
+            </Text>
+          </Group>
+          <Card withBorder shadow="sm" radius="md">
+            {myYields.length === 0 ? (
+              <Text c="dimmed" size="sm">
+                No harvests logged yet.
+              </Text>
+            ) : (
+              <Table striped>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Crop</Table.Th>
+                    <Table.Th>Qty</Table.Th>
+                    <Table.Th>Price</Table.Th>
+                    <Table.Th>Date</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{yieldRows}</Table.Tbody>
+              </Table>
+            )}
           </Card>
         </Grid.Col>
       </Grid>
@@ -257,7 +354,8 @@ export function ProducerDashboard() {
 
 export function ProcessorDashboard() {
   const [opened, { open, close }] = useDisclosure(false);
-  const [myProducts, setMyProducts] = useState([]);
+  // Initialized with new mock data instead of []
+  const [myProducts, setMyProducts] = useState(initialMyProducts);
 
   // Form states
   const [product, setProduct] = useState("");
@@ -287,11 +385,6 @@ export function ProcessorDashboard() {
       <Table.Td>{row.farm}</Table.Td>
       <Table.Td>{row.crop}</Table.Td>
       <Table.Td>{row.qty}</Table.Td>
-      <Table.Td>
-        <Button variant="light" size="xs" color="orange">
-          Buy Raw
-        </Button>
-      </Table.Td>
     </Table.Tr>
   ));
 
@@ -342,9 +435,6 @@ export function ProcessorDashboard() {
             onChange={(e) => setReadyDate(e.currentTarget.value)}
             required
           />
-          <Button fullWidth color="orange" mt="md" onClick={handleSubmit}>
-            Add Product
-          </Button>
         </Stack>
       </Modal>
 
@@ -360,7 +450,6 @@ export function ProcessorDashboard() {
                   <Table.Th>Farm</Table.Th>
                   <Table.Th>Crop</Table.Th>
                   <Table.Th>Volume</Table.Th>
-                  <Table.Th>Action</Table.Th>
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>{producerRows}</Table.Tbody>
@@ -373,9 +462,6 @@ export function ProcessorDashboard() {
             <Text size="lg" fw={600}>
               My Processed Goods
             </Text>
-            <Button size="xs" color="orange" onClick={open}>
-              + Add Product
-            </Button>
           </Group>
           <Card withBorder shadow="sm" radius="md">
             {myProducts.length === 0 ? (
@@ -408,11 +494,6 @@ export function DistributorDashboard() {
       <Table.Td>{row.factory}</Table.Td>
       <Table.Td>{row.product}</Table.Td>
       <Table.Td>{row.qty}</Table.Td>
-      <Table.Td>
-        <Button variant="light" size="xs" color="grape">
-          Ship
-        </Button>
-      </Table.Td>
     </Table.Tr>
   ));
 
@@ -429,7 +510,6 @@ export function DistributorDashboard() {
                 <Table.Th>Factory</Table.Th>
                 <Table.Th>Product</Table.Th>
                 <Table.Th>Volume</Table.Th>
-                <Table.Th>Action</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{processorRows}</Table.Tbody>
