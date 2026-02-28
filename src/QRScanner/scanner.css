@@ -1,0 +1,13 @@
+#reader {
+  color: white;
+}
+
+#reader__dashboard {
+  color: black;
+}
+
+#reader button {
+  background: #228be6;
+  color: white;
+  border: none;
+}
