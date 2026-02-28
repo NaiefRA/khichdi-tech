@@ -231,48 +231,6 @@ export function ProducerDashboard() {
 
   return (
     <>
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Log Crop Harvest"
-        centered
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-      >
-        <Stack>
-          <TextInput
-            label="Crop Name"
-            placeholder="e.g. Raw Wheat"
-            value={crop}
-            onChange={(e) => setCrop(e.currentTarget.value)}
-            required
-          />
-          <TextInput
-            label="Yield Amount"
-            placeholder="e.g. 5000 kg"
-            value={qty}
-            onChange={(e) => setQty(e.currentTarget.value)}
-            required
-          />
-          <TextInput
-            label="Selling Price"
-            placeholder="e.g. $0.8/kg"
-            value={price}
-            onChange={(e) => setPrice(e.currentTarget.value)}
-            required
-          />
-          <TextInput
-            label="Harvest Date"
-            placeholder="e.g. Jan 10"
-            value={harvestDate}
-            onChange={(e) => setHarvestDate(e.currentTarget.value)}
-            required
-          />
-          <Button fullWidth color="green" mt="md" onClick={handleSubmit}>
-            Log Harvest
-          </Button>
-        </Stack>
-      </Modal>
-
       <Grid w={"70vw"}>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <Text size="lg" fw={600} mb="sm">
@@ -290,36 +248,6 @@ export function ProducerDashboard() {
               </Table.Thead>
               <Table.Tbody>{supplierRows}</Table.Tbody>
             </Table>
-          </Card>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, md: 6 }}>
-          <Group justify="space-between" mb="sm">
-            <Text size="lg" fw={600}>
-              My Crop Yields
-            </Text>
-            <Button size="xs" color="green" onClick={open}>
-              + Log Harvest
-            </Button>
-          </Group>
-          <Card withBorder shadow="sm" radius="md">
-            {myYields.length === 0 ? (
-              <Text c="dimmed" size="sm">
-                No harvests logged yet.
-              </Text>
-            ) : (
-              <Table striped>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Crop</Table.Th>
-                    <Table.Th>Qty</Table.Th>
-                    <Table.Th>Price</Table.Th>
-                    <Table.Th>Date</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>{yieldRows}</Table.Tbody>
-              </Table>
-            )}
           </Card>
         </Grid.Col>
       </Grid>
